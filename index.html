@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VirtuaLab — Trabalho de Conclusão de Curso</title>
+<meta name="description" content="Servidor de virtualização que entrega um laboratório de informática completo para a biblioteca da escola. Monografia, pitch, slides, banner e demonstração.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script>
+/* =========================================================================
+   COLE SEUS LINKS AQUI. É o único lugar do arquivo que você precisa editar.
+   Deixe "" (vazio) no que ainda não estiver pronto — a página mostra um
+   aviso no lugar e continua funcionando.
+
+   Aceita: link do YouTube, link do Google Drive, link direto de PDF,
+   link direto de imagem (.jpg/.png), ou o nome de um arquivo que esteja
+   na mesma pasta deste site (ex.: "monografia.pdf").
+   ========================================================================= */
+const CONTEUDOS = {
+  monografia: "Documentação_VirtuaLab(Completa).docx",   // ex.: "monografia.pdf"
+  pitch:      "Vídeo_Ptch.mp4",   // ex.: "https://youtu.be/XXXXXXXXXXX"
+  slides:     "Cópia de Slide TCC (Oficial).pptx",   // ex.: "https://docs.google.com/presentation/d/ID/edit"
+  banner:     "banner-excute-63-1.pptx",   // ex.: "banner.png"
+  demo:       "WhatsApp Video 2026-09-15 at 21.32.53.mp4"    // ex.: "https://youtu.be/XXXXXXXXXXX"
+};
+</script>
+
+<style>
+:root{
+  --navy:      #0A1F44;
+  --azul:      #1565C0;
+  --ceu:       #38BDF8;
+  --verde:     #7CC63F;
+  --verde-luz: #A8E063;
+  --branco:    #FFFFFF;
+
+  --tinta:      #0A1F44;
+  --tinta-suave:#3A5577;
+  --vidro:      rgba(255,255,255,.60);
+  --vidro-borda:rgba(255,255,255,.85);
+  --sombra:     0 18px 50px -24px rgba(8,42,88,.45);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--tinta);
+  background:linear-gradient(180deg,
+    #FFFFFF 0%,
+    #F6FCFE 8%,
+    #EDF8FB 20%,
+    #E2F4F3 32%,
+    #DCF0FA 44%,
+    #CFE9F8 58%,
+    #B4DCF4 70%,
+    #7CB9E4 80%,
+    #2A66AE 89%,
+    #0B2A5C 95%,
+    #061A3A 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- aurora ambiente ---------- */
+.aurora{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.aurora span{position:absolute;border-radius:50%;filter:blur(90px);opacity:.42;}
+.aurora .a1{width:60vw;height:60vw;top:-22vw;left:-12vw;background:radial-gradient(circle,#A8E063,transparent 68%);}
+.aurora .a2{width:52vw;height:52vw;top:4vw;right:-16vw;background:radial-gradient(circle,#38BDF8,transparent 68%);}
+.aurora .a3{width:46vw;height:46vw;top:78vh;left:22vw;background:radial-gradient(circle,#1565C0,transparent 70%);opacity:.26;}
+
+.envolve{position:relative;z-index:1;}
+.faixa{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+/* ---------- navegação ---------- */
+nav{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:14px 28px;
+  background:rgba(255,255,255,.55);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.7);
+}
+nav .marca{font-family:'Outfit';font-weight:500;letter-spacing:-.01em;font-size:1.05rem;color:var(--navy);}
+nav .marca b{color:var(--verde);font-weight:500;}
+nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-size:.9rem;}
+nav a{color:var(--tinta-suave);text-decoration:none;padding:4px 0;border-bottom:1.5px solid transparent;transition:color .2s,border-color .2s;}
+nav a:hover,nav a:focus-visible{color:var(--navy);border-color:var(--verde);}
+@media(max-width:700px){nav ul{display:none;}}
+
+/* ---------- capa ---------- */
+header{padding:86px 0 96px;text-align:center;}
+header img.logo{
+  width:min(440px,78vw);height:auto;
+  mix-blend-mode:multiply;
+  margin:0 auto 34px;display:block;
+}
+h1{
+  font-family:'Outfit';font-weight:200;
+  font-size:clamp(1.95rem,4.6vw,3.35rem);
+  line-height:1.16;letter-spacing:-.02em;
+  max-width:19ch;margin:0 auto 22px;
+  background:linear-gradient(100deg,var(--navy) 18%,var(--azul) 58%,var(--verde) 96%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+header p.linha{
+  font-size:1.03rem;line-height:1.7;color:var(--tinta-suave);
+  max-width:56ch;margin:0 auto 30px;font-weight:300;
+}
+.selo{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:8px 18px;border-radius:999px;
+  background:rgba(255,255,255,.6);border:1px solid var(--vidro-borda);
+  font-size:.82rem;color:var(--tinta-suave);
+}
+.selo i{width:7px;height:7px;border-radius:50%;background:var(--verde);font-style:normal;}
+
+/* ---------- seções ---------- */
+section{padding:72px 0;}
+h2{
+  font-family:'Outfit';font-weight:300;
+  font-size:clamp(1.55rem,3vw,2.25rem);
+  letter-spacing:-.015em;margin:0 0 14px;color:var(--navy);
+}
+.intro{font-weight:300;color:var(--tinta-suave);max-width:60ch;line-height:1.75;margin:0 0 42px;}
+
+/* ---------- esquema ---------- */
+.esquema{
+  background:var(--vidro);border:1px solid var(--vidro-borda);
+  border-radius:26px;padding:26px;box-shadow:var(--sombra);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.esquema svg{width:100%;height:auto;display:block;}
+.fluxo{stroke-dasharray:7 11;animation:corre 3.6s linear infinite;}
+@keyframes corre{to{stroke-dashoffset:-72;}}
+
+.fichas{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;}
+.ficha{
+  padding:8px 16px;border-radius:999px;font-size:.84rem;
+  background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);
+  color:var(--tinta-suave);
+}
+.ficha strong{color:var(--navy);font-weight:500;}
+
+/* ---------- materiais ---------- */
+.grade{display:grid;grid-template-columns:repeat(12,1fr);gap:22px;}
+.peca{
+  grid-column:span 12;
+  background:var(--vidro);border:1px solid var(--vidro-borda);
+  border-radius:26px;padding:22px;box-shadow:var(--sombra);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  display:flex;flex-direction:column;gap:16px;
+}
+@media(min-width:880px){
+  .p-mono{grid-column:span 7;}
+  .p-banner{grid-column:span 5;}
+  .p-pitch{grid-column:span 6;}
+  .p-demo{grid-column:span 6;}
+  .p-slides{grid-column:span 12;}
+}
+.cabeca{display:flex;align-items:baseline;justify-content:space-between;gap:14px;}
+.peca h3{font-family:'Outfit';font-weight:500;font-size:1.12rem;margin:0;color:var(--navy);}
+.peca .desc{font-size:.85rem;color:var(--tinta-suave);font-weight:300;margin:-8px 0 0;line-height:1.6;}
+.estado{font-size:.75rem;white-space:nowrap;color:var(--tinta-suave);display:flex;align-items:center;gap:7px;}
+.estado i{width:7px;height:7px;border-radius:50%;background:#C6D5E4;font-style:normal;}
+.estado.pronto i{background:var(--verde);box-shadow:0 0 0 4px rgba(124,198,63,.22);}
+
+.moldura{
+  position:relative;width:100%;border-radius:15px;overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.75),rgba(224,241,252,.6));
+  border:1px solid rgba(255,255,255,.75);
+}
+.r-169{aspect-ratio:16/9;}
+.r-43{aspect-ratio:4/3;}
+.r-34{aspect-ratio:3/4;}
+.moldura iframe,.moldura img,.moldura video{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;}
+.moldura img{object-fit:contain;background:#fff;}
+.vazio{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:9px;text-align:center;padding:24px;
+  color:var(--tinta-suave);font-size:.84rem;font-weight:300;line-height:1.6;
+}
+.vazio code{
+  font-family:ui-monospace,monospace;font-size:.78rem;
+  background:rgba(10,31,68,.07);padding:3px 8px;border-radius:6px;color:var(--navy);
+}
+.vazio svg{width:30px;height:30px;opacity:.45;}
+
+.acao{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:9px;
+  padding:11px 22px;border-radius:999px;text-decoration:none;font-size:.88rem;font-weight:500;
+  color:#fff;background:linear-gradient(100deg,var(--navy),var(--azul) 62%,var(--ceu));
+  box-shadow:0 10px 24px -12px rgba(21,101,192,.8);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.acao:hover,.acao:focus-visible{transform:translateY(-2px);box-shadow:0 16px 30px -12px rgba(21,101,192,.9);}
+.acao.some{display:none;}
+
+/* ---------- fecho ---------- */
+.fecho{padding:96px 0 40px;color:#DCEBFA;text-align:center;}
+.fecho h2{color:#fff;}
+.fecho p{font-weight:300;color:#A9C6E6;max-width:52ch;margin:0 auto;line-height:1.75;}
+.fecho .risco{
+  width:90px;height:3px;border-radius:2px;margin:34px auto 0;
+  background:linear-gradient(90deg,var(--verde),var(--ceu),var(--azul));
+}
+footer{padding:26px 0 54px;text-align:center;color:#7FA3CC;font-size:.8rem;font-weight:300;}
+
+:focus-visible{outline:2.5px solid var(--verde);outline-offset:3px;border-radius:4px;}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;}
+  html{scroll-behavior:auto;}
+}
+</style>
+</head>
+<body>
+
+<div class="aurora"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+
+<div class="envolve">
+
+<nav>
+  <div class="marca">Virtua<b>Lab</b></div>
+  <ul>
+    <li><a href="#projeto">O projeto</a></li>
+    <li><a href="#materiais">Materiais</a></li>
+    <li><a href="#equipe">Ficha técnica</a></li>
+  </ul>
+</nav>
+
+<header class="faixa">
+  <img class="logo" src="virtualab-logo.jpeg" alt="VirtuaLab">
+  <h1>Um laboratório de informática inteiro dentro de um servidor.</h1>
+  <p class="linha">Terminais leves na biblioteca da escola dão boot pela rede e recebem uma área de trabalho Linux completa, entregue por um único servidor de virtualização. Esta página reúne tudo o que foi produzido no Trabalho de Conclusão de Curso.</p>
+  <div class="selo"><i></i> M-TEC em Informática, ETEC Jorge Street</div>
+</header>
+
+<section id="projeto" class="faixa">
+  <h2>Como o VirtuaLab funciona</h2>
+  <p class="intro">O servidor concentra o processamento e o armazenamento. Os terminais não guardam nada: ligam, buscam o sistema na rede e abrem a máquina virtual do aluno. Manutenção, atualização e controle de acesso acontecem em um lugar só.</p>
+
+  <div class="esquema">
+    <svg viewBox="0 0 900 260" role="img" aria-label="Esquema: servidor Proxmox entrega máquinas virtuais pela rede a três terminais leves">
+      <defs>
+        <linearGradient id="g-serv" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#14345F"/><stop offset="1" stop-color="#0A1F44"/>
+        </linearGradient>
+        <linearGradient id="g-fio" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#7CC63F"/><stop offset="1" stop-color="#38BDF8"/>
+        </linearGradient>
+      </defs>
+
+      <!-- servidor -->
+      <rect x="40" y="70" width="150" height="120" rx="14" fill="url(#g-serv)"/>
+      <g fill="#8FD6FF" opacity=".75">
+        <rect x="62" y="92" width="60" height="5" rx="2.5"/>
+        <rect x="62" y="128" width="60" height="5" rx="2.5"/>
+        <rect x="62" y="164" width="60" height="5" rx="2.5"/>
+      </g>
+      <circle cx="152" cy="94" r="4.5" fill="#A8E063"/>
+      <circle cx="152" cy="130" r="4.5" fill="#A8E063"/>
+      <circle cx="152" cy="166" r="4.5" fill="#38BDF8"/>
+      <text x="115" y="222" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" fill="#3A5577">Servidor Proxmox</text>
+
+      <!-- rede -->
+      <rect x="380" y="104" width="110" height="52" rx="12" fill="#fff" stroke="#BEDFF3"/>
+      <text x="435" y="135" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#0A1F44">Rede</text>
+      <text x="435" y="184" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#3A5577">DHCP, TFTP e boot PXE</text>
+
+      <path class="fluxo" d="M190 130 H380" stroke="url(#g-fio)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path class="fluxo" d="M490 130 H600 Q640 130 640 96 V66 H700" stroke="url(#g-fio)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path class="fluxo" d="M490 130 H700" stroke="url(#g-fio)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path class="fluxo" d="M490 130 H600 Q640 130 640 164 V194 H700" stroke="url(#g-fio)" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+      <!-- terminais -->
+      <g fill="#fff" stroke="#9FD0EC">
+        <rect x="700" y="42" width="88" height="50" rx="9"/>
+        <rect x="700" y="106" width="88" height="50" rx="9"/>
+        <rect x="700" y="170" width="88" height="50" rx="9"/>
+      </g>
+      <g fill="#DCF0FA">
+        <rect x="710" y="52" width="68" height="30" rx="5"/>
+        <rect x="710" y="116" width="68" height="30" rx="5"/>
+        <rect x="710" y="180" width="68" height="30" rx="5"/>
+      </g>
+      <text x="810" y="72" font-family="Inter,sans-serif" font-size="13" fill="#3A5577">Terminal</text>
+      <text x="810" y="136" font-family="Inter,sans-serif" font-size="13" fill="#3A5577">Terminal</text>
+      <text x="810" y="200" font-family="Inter,sans-serif" font-size="13" fill="#3A5577">Terminal</text>
+    </svg>
+  </div>
+
+  <div class="fichas">
+    <span class="ficha"><strong>Proxmox VE 9.2</strong> de virtualização</span>
+    <span class="ficha"><strong>Dell PowerEdge R230</strong> com 32 GB ECC</span>
+    <span class="ficha">Áreas de trabalho <strong>Linux Mint</strong></span>
+    <span class="ficha">Tela remota por <strong>SPICE</strong></span>
+    <span class="ficha">Contêiner LXC com <strong>DHCP, TFTP e NFS</strong></span>
+    <span class="ficha">Boot dos terminais por <strong>PXE</strong></span>
+    <span class="ficha">Permissões por <strong>perfil de aluno e professor</strong></span>
+  </div>
+</section>
+
+<section id="materiais" class="faixa">
+  <h2>Materiais do TCC</h2>
+  <p class="intro">Tudo o que foi entregue na banca, reunido e pronto para ler, assistir e baixar.</p>
+
+  <div class="grade">
+
+    <article class="peca p-mono">
+      <div class="cabeca">
+        <h3>Monografia</h3>
+        <span class="estado" data-estado="monografia"><i></i>aguardando</span>
+      </div>
+      <p class="desc">Documento completo: fundamentação, projeto da rede, implantação e resultados.</p>
+      <div class="moldura r-43" data-slot="monografia" data-rotulo="da monografia"></div>
+      <a class="acao some" data-acao="monografia" href="#">Abrir a monografia</a>
+    </article>
+
+    <article class="peca p-banner">
+      <div class="cabeca">
+        <h3>Banner</h3>
+        <span class="estado" data-estado="banner"><i></i>aguardando</span>
+      </div>
+      <p class="desc">Peça impressa da exposição, com o resumo visual do projeto.</p>
+      <div class="moldura r-34" data-slot="banner" data-rotulo="do banner"></div>
+      <a class="acao some" data-acao="banner" href="#">Ver em tamanho real</a>
+    </article>
+
+    <article class="peca p-pitch">
+      <div class="cabeca">
+        <h3>Vídeo pitch</h3>
+        <span class="estado" data-estado="pitch"><i></i>aguardando</span>
+      </div>
+      <p class="desc">A apresentação curta do problema e da solução.</p>
+      <div class="moldura r-169" data-slot="pitch" data-rotulo="do vídeo pitch"></div>
+      <a class="acao some" data-acao="pitch" href="#">Assistir em outra aba</a>
+    </article>
+
+    <article class="peca p-demo">
+      <div class="cabeca">
+        <h3>Produto em funcionamento</h3>
+        <span class="estado" data-estado="demo"><i></i>aguardando</span>
+      </div>
+      <p class="desc">Demonstração real: terminal ligando, boot pela rede e a área de trabalho abrindo.</p>
+      <div class="moldura r-169" data-slot="demo" data-rotulo="da demonstração"></div>
+      <a class="acao some" data-acao="demo" href="#">Assistir em outra aba</a>
+    </article>
+
+    <article class="peca p-slides">
+      <div class="cabeca">
+        <h3>Slides da apresentação</h3>
+        <span class="estado" data-estado="slides"><i></i>aguardando</span>
+      </div>
+      <p class="desc">O material usado na defesa diante da banca.</p>
+      <div class="moldura r-169" data-slot="slides" data-rotulo="dos slides"></div>
+      <a class="acao some" data-acao="slides" href="#">Abrir os slides</a>
+    </article>
+
+  </div>
+</section>
+
+<section id="equipe" class="fecho faixa">
+  <h2>Ficha técnica</h2>
+  <p>VirtuaLab foi desenvolvido como Trabalho de Conclusão de Curso do M-TEC em Informática da ETEC Jorge Street, com foco em redes, virtualização e uso responsável de hardware na escola pública.</p>
+  <div class="risco"></div>
+</section>
+
+<footer class="faixa">VirtuaLab, 2026</footer>
+
+</div>
+
+<script>
+(function(){
+  const ICONE = '<svg viewBox="0 0 24 24" fill="none" stroke="#3A5577" stroke-width="1.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+
+  function idYouTube(u){
+    const m = u.match(/(?:youtu\.be\/|v=|\/embed\/|\/shorts\/)([A-Za-z0-9_-]{11})/);
+    return m ? m[1] : null;
+  }
+  function idDrive(u){
+    const m = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=)([A-Za-z0-9_-]+)/);
+    return m ? m[1] : null;
+  }
+
+  function incorpora(url){
+    const yt = idYouTube(url);
+    if(yt) return '<iframe src="https://www.youtube.com/embed/'+yt+'" title="Vídeo" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
+
+    const dr = idDrive(url);
+    if(dr) return '<iframe src="https://drive.google.com/file/d/'+dr+'/preview" title="Arquivo" allowfullscreen loading="lazy"></iframe>';
+
+    if(/docs\.google\.com\/presentation/.test(url))
+      return '<iframe src="'+url.replace(/\/(edit|pub|view).*$/,'/embed')+'" title="Slides" allowfullscreen loading="lazy"></iframe>';
+
+    if(/\.(png|jpe?g|webp|gif|svg)(\?|$)/i.test(url))
+      return '<img src="'+url+'" alt="" loading="lazy">';
+
+    if(/\.(mp4|webm|mov)(\?|$)/i.test(url))
+      return '<video src="'+url+'" controls preload="metadata"></video>';
+
+    return '<iframe src="'+url+'" title="Documento" loading="lazy"></iframe>';
+  }
+
+  Object.keys(CONTEUDOS).forEach(function(chave){
+    const url    = (CONTEUDOS[chave] || '').trim();
+    const slot   = document.querySelector('[data-slot="'+chave+'"]');
+    const estado = document.querySelector('[data-estado="'+chave+'"]');
+    const acao   = document.querySelector('[data-acao="'+chave+'"]');
+    if(!slot) return;
+
+    if(!url){
+      slot.innerHTML = '<div class="vazio">'+ICONE+
+        '<div>Adicione o link '+slot.dataset.rotulo+' em <code>CONTEUDOS.'+chave+'</code>, no início do arquivo.</div></div>';
+      return;
+    }
+
+    slot.innerHTML = incorpora(url);
+    estado.classList.add('pronto');
+    estado.lastChild.textContent = 'disponível';
+    acao.href = url;
+    acao.target = '_blank';
+    acao.rel = 'noopener';
+    acao.classList.remove('some');
+  });
+})();
+</script>
+</body>
+</html>
